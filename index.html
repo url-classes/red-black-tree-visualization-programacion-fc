@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Árbol Rojo-Negro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Panel de Control -->
+        <div class="control-panel">
+            <h2>Panel de Control</h2>
+            <input type="number" id="node-value" placeholder="Valor del nodo" />
+            <div class="button-group">
+                <button id="insert-button">Insertar</button>
+                <button id="delete-button">Eliminar</button>
+                <button id="search-button">Buscar</button>
+            </div>
+            <select id="order-select">
+                <option value="inorder">Inorder</option>
+                <option value="preorder">Preorder</option>
+                <option value="postorder">Postorder</option>
+            </select>
+            <button id="traverse-button">Mostrar Orden</button>
+        </div>
+        
+        <div class="node-data">
+            <!----<p id="node-details">Información del Nodo</p>---->
+        </div>
+
+        <!-- Visualizador -->
+        <div id="visualizer">
+            <svg id="tree-canvas" width="800" height="500" style="background-color: #1a1a1a;"></svg>
+        </div>
+
+        <!-- Datos del Nodo -->
+        <div class="node-data">
+            <h2>Datos del Nodo</h2>
+            <p id="node-details">Selecciona un nodo para ver los detalles</p>
+        </div>
+    </div>
+
+    <script src="dist/script.js"></script>
+</body>
+</html>
