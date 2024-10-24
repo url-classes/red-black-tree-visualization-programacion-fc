@@ -34,11 +34,39 @@ class RedBlackTree {
     root: TreeNode | null = null;
 
     insert(value: number): void {
-        // Lógica para insertar el nodo en el árbol
         const newNode = new TreeNode(value, Color.RED);
-        // Lógica para insertar el nodo correctamente y balancear
-        this.render();
-    }
+        console.log("Insertando nodo:", newNode);
+    
+        if (this.root === null) {
+            this.root = newNode;
+            console.log("El nodo se insertó como raíz:", newNode);
+        } else {
+            let current: TreeNode | null = this.root;  // Permitir que 'current' sea null
+            let parent: TreeNode | null = null;
+    
+            // Encontrar la posición adecuada para insertar el nuevo nodo
+            while (current !== null) {
+                parent = current;  // Guardamos el nodo padre antes de cambiar 'current'
+                if (value < current.value) {
+                    current = current.left;
+                } else {
+                    current = current.right;
+                }
+            }
+    
+            // 'current' ahora es null, y 'parent' es el nodo padre donde insertaremos el nuevo nodo
+            newNode.parent = parent;
+            if (parent !== null) {
+                if (value < parent.value) {
+                    parent.left = newNode;
+                    console.log(`Insertado a la izquierda de ${parent.value}`);
+                } else {
+                    parent.right = newNode;
+                    console.log(`Insertado a la derecha de ${parent.value}`);
+                }
+            }
+        }
+    }   
 
     delete(value: number): void {
         // Lógica para eliminar un nodo del árbol
@@ -103,21 +131,20 @@ class RedBlackTree {
 
     render(): void {
         const treeLayout = this.calculateTreeLayout(this.root);
+        console.log("Renderizando árbol:", treeLayout); // Verificar si el layout se está calculando
         const svgElement = document.getElementById("tree-canvas");
-
+    
         if (!(svgElement instanceof SVGSVGElement)) {
             console.error("El elemento SVG no fue encontrado o no es del tipo correcto.");
             return;
         }
-
-        // Limpiar el contenido previo del SVG antes de dibujar el nuevo estado
+    
         svgElement.innerHTML = '';
-
-        // Dibujar el árbol a partir de su disposición calculada
+    
         if (treeLayout) {
             this.drawTree(svgElement, treeLayout);
         }
-    }
+    }    
 
     private calculateTreeLayout(
         node: TreeNode | null,
@@ -132,19 +159,18 @@ class RedBlackTree {
             color: node.color === Color.RED ? "red" : "black",
             x,
             y,
-            left: this.calculateTreeLayout(node.left, x - 100 / level, y + 60, level + 1),
-            right: this.calculateTreeLayout(node.right, x + 100 / level, y + 60, level + 1),
+            left: this.calculateTreeLayout(node.left, x - 50 / level, y + 60, level + 1),
+            right: this.calculateTreeLayout(node.right, x + 50 / level, y + 60, level + 1),
         };
 
         return nodePosition;
     }
 
     private drawTree(svg: SVGSVGElement, root: TreeNodePosition): void {
-        // Función recursiva para dibujar el árbol
+        console.log("Dibujando árbol:", root); // Verifica que se está dibujando el nodo raíz
         const drawNode = (node: TreeNodePosition | null) => {
             if (!node) return;
-
-            // Dibujar conexiones entre nodos
+    
             if (node.left) {
                 this.drawLine(svg, node.x, node.y, node.left.x, node.left.y);
                 drawNode(node.left);
@@ -153,13 +179,12 @@ class RedBlackTree {
                 this.drawLine(svg, node.x, node.y, node.right.x, node.right.y);
                 drawNode(node.right);
             }
-
-            // Dibujar el nodo
+    
             this.drawCircle(svg, node.x, node.y, node.value, node.color);
         };
-
+    
         drawNode(root);
-    }
+    }    
 
     private drawLine(svg: SVGSVGElement, x1: number, y1: number, x2: number, y2: number): void {
         const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -209,6 +234,7 @@ class TreeApp {
         const orderSelect = document.getElementById('order-select') as HTMLSelectElement;
 
         insertButton.addEventListener('click', () => {
+            const nodeInput = document.getElementById('node-value') as HTMLInputElement;
             const nodeValue = parseInt((document.getElementById('node-value') as HTMLInputElement).value);
             if (isNaN(nodeValue)) {
                 alert('Ingresa un número!');
@@ -216,6 +242,7 @@ class TreeApp {
             }
             this.tree.insert(nodeValue);
             this.tree.render();
+            nodeInput.value = "";
         });
 
         deleteButton.addEventListener('click', () => {
