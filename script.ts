@@ -31,6 +31,64 @@ class TreeNode {
 }
 
 class RedBlackTree {
+
+    delete(value: number): void {
+        const nodeToDelete = this.findNode(this.root, value);
+        if (nodeToDelete === null) {
+            console.log("El nodo con el valor", value, "no se encontró en el árbol.");
+            return;
+        }
+        
+        console.log("Eliminando nodo:", nodeToDelete);
+        // Aquí iría la implementación del algoritmo de eliminación específico para un árbol Red-Black,
+        // que incluye el ajuste de colores y reequilibrio del árbol si es necesario.
+        
+        // Placeholder para el código de eliminación
+        this.root = this.deleteNode(this.root, nodeToDelete);
+    }
+    
+    // Método auxiliar para encontrar el nodo a eliminar
+    private findNode(node: TreeNode | null, value: number): TreeNode | null {
+        if (node === null) {
+            return null;
+        }
+        if (value === node.value) {
+            return node;
+        } else if (value < node.value) {
+            return this.findNode(node.left, value);
+        } else {
+            return this.findNode(node.right, value);
+        }
+    }
+
+    // Método auxiliar para realizar la eliminación (simplificado, el real sería más complejo)
+    private deleteNode(root: TreeNode | null, nodeToDelete: TreeNode): TreeNode | null {
+        if (root === null) return null;
+        if (nodeToDelete.value < root.value) {
+            root.left = this.deleteNode(root.left, nodeToDelete);
+        } else if (nodeToDelete.value > root.value) {
+            root.right = this.deleteNode(root.right, nodeToDelete);
+        } else {
+            // Nodo encontrado
+            if (root.left === null) return root.right;
+            if (root.right === null) return root.left;
+            
+            // Encontrar el sucesor
+            let minLargerNode = this.findMin(root.right);
+            root.value = minLargerNode.value;
+            root.right = this.deleteNode(root.right, minLargerNode);
+        }
+        return root;
+    }
+
+    // Encontrar el mínimo valor de un subárbol
+    private findMin(node: TreeNode): TreeNode {
+        while (node.left !== null) {
+            node = node.left;
+        }
+        return node;
+    }
+
     root: TreeNode | null = null;
 
     insert(value: number): void {
@@ -67,11 +125,6 @@ class RedBlackTree {
             }
         }
     }   
-
-    delete(value: number): void {
-        // Lógica para eliminar un nodo del árbol
-        this.render();
-    }
 
     search(value: number): TreeNode | null {
         let current = this.root;
@@ -284,6 +337,8 @@ class TreeApp {
         }
     }
 }
+
+
 
 // Inicializamos el árbol cuando la ventana carga
 window.onload = () => {
