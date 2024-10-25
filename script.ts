@@ -40,10 +40,7 @@ class RedBlackTree {
         }
         
         console.log("Eliminando nodo:", nodeToDelete);
-        // Aquí iría la implementación del algoritmo de eliminación específico para un árbol Red-Black,
-        // que incluye el ajuste de colores y reequilibrio del árbol si es necesario.
         
-        // Placeholder para el código de eliminación
         this.root = this.deleteNode(this.root, nodeToDelete);
     }
     
