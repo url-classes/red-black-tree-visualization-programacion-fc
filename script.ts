@@ -430,7 +430,7 @@ class TreeApp {
 
         insertButton.addEventListener('click', () => {
             const nodeInput = document.getElementById('node-value') as HTMLInputElement;
-            const nodeValue = parseInt((document.getElementById('node-value') as HTMLInputElement).value);
+            const nodeValue = parseInt(nodeInput.value);
             if (isNaN(nodeValue)) {
                 alert('Ingresa un número!');
                 return;
@@ -470,10 +470,26 @@ class TreeApp {
         });
     }
 
+    private getNodeLevel(node: TreeNode | null): number {
+        let level = 1;
+        while (node && node.parent) {
+            level++;
+            node = node.parent;
+        }
+        return level;
+    }
+
+    private getNodeRole(node: TreeNode): string {
+        if (!node.parent) return 'raíz';
+        return node === node.parent.left ? 'hijo izquierdo' : 'hijo derecho';
+    }
+
     private showNodeDetails(node: TreeNode | null) {
         const detailsElement = document.getElementById('node-details')!;
         if (node) {
-            detailsElement.textContent = `Nodo encontrado: Valor = ${node.value}, Color = ${node.isRed() ? 'Rojo' : 'Negro'}`;
+            const level = this.getNodeLevel(node);
+            const role = this.getNodeRole(node);
+            detailsElement.textContent = `Nodo encontrado: Valor = ${node.value}, Color = ${node.isRed() ? 'Rojo' : 'Negro'}, Nivel = ${level}, Rol = ${role}`;
         } else {
             detailsElement.textContent = 'Nodo no encontrado';
         }
